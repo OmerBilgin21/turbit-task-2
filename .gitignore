@@ -93,3 +93,4 @@ __pycache__/
 /backend/.env.production
 /backend/*.csv
 .vscode
+/frontend/dist

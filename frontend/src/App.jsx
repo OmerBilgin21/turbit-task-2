@@ -1,11 +1,21 @@
-import "./App.css";
+// external
 import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
 import Dropdown from "react-dropdown";
+
+// hooks
 import { useState, useEffect } from "react";
-import { getTurbines, getTurbineData } from "./utils/axios";
-import "react-datepicker/dist/react-datepicker.css";
+
+// components
 import Plot from "./components/Plot";
+
+// utils
+import { getTurbines, getTurbineData } from "./utils/axios";
+
+// styles
+import "./App.css";
+import "react-datepicker/dist/react-datepicker.css";
+
 function App() {
 	const [turbines, setTurbines] = useState(null);
 	const [turbineData, setTurbineData] = useState({});
@@ -100,17 +110,13 @@ function App() {
 	}, [endDate, turbineData, selectedTurbine, startDate]);
 
 	return (
-		<div className="graph-container">
-			{/*<Suspense
-				fallback={
-					<div className="flex w-screen h-screen justify-center items-center bg-slate-400 text-black">
-						<p>Loading...</p>
-					</div>
-				}
-			>*/}
+		<div className="flex flex-col w-screen h-screen bg-slate-200 items-center justify-center gap-8">
 			<Dropdown
+				controlClassName="font-bold text-black border 
+				border-b-black w-full border-opacity-100"
 				placeholder="Please select a turbine..."
-				className="bg-slate-300 rounded-md text-white p-2 cursor-pointer"
+				className="bg-slate-300 rounded-md text-white p-2 
+				cursor-pointer border border-opacity-80 border-black"
 				options={turbines?.map((e) => ({
 					label: e.name,
 					value: e.id,
