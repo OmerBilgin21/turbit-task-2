@@ -1,13 +1,12 @@
-"use client";
-import Plot from "@/components/Plot";
+import "./App.css";
 import dayjs from "dayjs";
 import DatePicker from "react-datepicker";
 import Dropdown from "react-dropdown";
-import { useState, useEffect, useMemo } from "react";
-import { getTurbines, getTurbineData } from "@/utils/axios";
+import { useState, useEffect } from "react";
+import { getTurbines, getTurbineData } from "./utils/axios";
 import "react-datepicker/dist/react-datepicker.css";
-
-export default function Home() {
+import Plot from "./components/Plot";
+function App() {
 	const [turbines, setTurbines] = useState(null);
 	const [turbineData, setTurbineData] = useState({});
 	const [startDate, setStartDate] = useState();
@@ -34,8 +33,6 @@ export default function Home() {
 	useEffect(() => {
 		const fetchTurbineData = async () => {
 			if (!turbines || turbines.length === 0) return;
-			console.log("=== endDate ===", endDate);
-			console.log("=== startDate ===", startDate);
 
 			try {
 				const promises = turbines.map(async (turbine) => {
@@ -74,7 +71,6 @@ export default function Home() {
 				]?.["Dat/Zeit"]
 			)?.toDate()
 		);
-		console.log("=== startDate ===", startDate);
 	}, [turbineData, selectedTurbine, turbines]);
 
 	useEffect(() => {
@@ -101,14 +97,24 @@ export default function Home() {
 				}
 			})
 		);
-	}, [startDate, endDate]);
+	}, [endDate, turbineData, selectedTurbine, startDate]);
 
 	return (
 		<div className="graph-container">
+			{/*<Suspense
+				fallback={
+					<div className="flex w-screen h-screen justify-center items-center bg-slate-400 text-black">
+						<p>Loading...</p>
+					</div>
+				}
+			>*/}
 			<Dropdown
 				placeholder="Please select a turbine..."
 				className="bg-slate-300 rounded-md text-white p-2 cursor-pointer"
-				options={turbines?.map((e) => ({ label: e.name, value: e.id }))}
+				options={turbines?.map((e) => ({
+					label: e.name,
+					value: e.id,
+				}))}
 				onChange={(val) => {
 					console.log("=== val  ===", val);
 					setSelectedTurbine(val.value);
@@ -128,3 +134,5 @@ export default function Home() {
 		</div>
 	);
 }
+
+export default App;

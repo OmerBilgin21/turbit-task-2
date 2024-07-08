@@ -92,3 +92,4 @@ __pycache__/
 /backend/.env.test
 /backend/.env.production
 /backend/*.csv
+.vscode
