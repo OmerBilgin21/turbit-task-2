@@ -43,11 +43,21 @@ def adjust_data(data: pd.DataFrame, id_to_assign: ObjectId) -> list[dict]:
 		for key, val in row.items():
 			new_key = key
 			new_val = val
+			should_not_touch = ("Dat/Zeit", "turbineId")
+
 			if isinstance(key, str):
 				new_key = key.strip()
-			if isinstance(val, str):
-				new_val = val.strip()
-			newd[new_key] = new_val
+
+			if (
+				isinstance(new_val, str)
+				and "," in new_val
+				and new_key not in should_not_touch
+			):
+				new_val = new_val.replace(",", ".")
+
+			newd[new_key] = (
+				float(new_val) if new_key not in should_not_touch else new_val
+			)
 		newd["turbineId"] = id_to_assign
 		new_list.append(newd)
 	return new_list
@@ -66,7 +76,7 @@ async def write_to_db() -> None:
 		[
 			{"name": "turbine 1", "_id": data1[0]["turbineId"]},
 			{"name": "turbine 2", "_id": data2[0]["turbineId"]},
-		]
+		],
 	)
 	await turbinec.insert_many(data1)
 	await turbinec.insert_many(data2)

@@ -1,6 +1,3 @@
-from datetime import datetime, timezone
-from typing import Any
-
 from pydantic import Field
 
 from .oid import Oid
@@ -9,26 +6,26 @@ from .out import Out
 
 class TurbineOut(Out):
 	Dat_Zeit: str = Field(alias="Dat/Zeit")
-	Wind: str
-	Rotor: str
-	Leistung: str
-	Azimut: str
+	Wind: float
+	Rotor: float
+	Leistung: float
+	Azimut: float
 	Prod_1: float = Field(alias="Prod. 1")
 	Prod_2: float = Field(alias="Prod. 2")
 	BtrStd_1: float = Field(alias="BtrStd 1")
 	BtrStd_2: float = Field(alias="BtrStd 2")
-	Gen1_minus: str = Field(alias="Gen1-")
-	Lager: str
-	Aussen: str = Field(alias="Außen")
-	GetrT: str = Field(alias="GetrT")
+	Gen1_minus: float = Field(alias="Gen1-")
+	Lager: float
+	Aussen: float = Field(alias="Außen")
+	GetrT: float = Field(alias="GetrT")
 	Status: float
-	Spann: str
-	Spann_1: str = Field(alias="Spann.1")
-	Spann_2: str = Field(alias="Spann.2")
-	Strom_minus: str = Field(alias="Strom-")
-	Strom_minus_1: str = Field(alias="Strom-.1")
-	Strom_minus_2: str = Field(alias="Strom-.2")
-	CosPh: str
+	Spann: float
+	Spann_1: float = Field(alias="Spann.1")
+	Spann_2: float = Field(alias="Spann.2")
+	Strom_minus: float = Field(alias="Strom-")
+	Strom_minus_1: float = Field(alias="Strom-.1")
+	Strom_minus_2: float = Field(alias="Strom-.2")
+	CosPh: float
 	Abgabe: float
 	Bezug: float
 	KH_Zahl1: float = Field(alias="KH-Zähl1")
