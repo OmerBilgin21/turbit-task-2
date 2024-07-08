@@ -122,7 +122,6 @@ function App() {
 					value: e.id,
 				}))}
 				onChange={(val) => {
-					console.log("=== val  ===", val);
 					setSelectedTurbine(val.value);
 				}}
 			/>

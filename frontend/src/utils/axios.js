@@ -17,6 +17,6 @@ export const getTurbines = async () => {
 export const getTurbineData = async (turbineId) => {
 	return await api({
 		method: "get",
-		url: `${turbineId}/turbine-data`,
+		url: `${turbineId}/data`,
 	});
 };

@@ -21,7 +21,7 @@ app.add_middleware(
 )
 
 
-@app.get("/turbines")
+@app.get("/turbines", response_model=list[Turbine])
 async def get_turbines() -> list[Turbine]:
 	"""Returns turbines
 
@@ -31,7 +31,7 @@ async def get_turbines() -> list[Turbine]:
 	return await retrieve_turbines()
 
 
-@app.get("/{turbine_id}/turbine-data")
+@app.get("/{turbine_id}/data", response_model=list[TurbineOut])
 async def get_turbine_data(turbine_id: str) -> list[TurbineOut]:
 	"""Returns turbine data
 
