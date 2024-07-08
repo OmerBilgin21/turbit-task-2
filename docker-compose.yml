@@ -3,17 +3,19 @@ services:
         build:
             dockerfile: ./backend/Dockerfile
         container_name: fastapi_container
-        command: ["tail", "-f", "/dev/null"]
+        #command: ["tail", "-f", "/dev/null"]
         ports:
             - 8000:8000
         depends_on:
             - mongodb
+        environment:
+            - DB_HOST=mongodb
 
     next:
         build:
             dockerfile: ./frontend/Dockerfile
         container_name: nextjs_container
-        command: ["tail", "-f", "/dev/null"]
+        #command: ["tail", "-f", "/dev/null"]
         ports:
             - 3000:3000
         depends_on:

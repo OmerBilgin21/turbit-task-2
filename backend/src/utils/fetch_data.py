@@ -41,6 +41,8 @@ def adjust_data(data: pd.DataFrame, id_to_assign: ObjectId) -> list[dict]:
 	for row in data_list:
 		newd = {}
 		for key, val in row.items():
+			new_key = key
+			new_val = val
 			if isinstance(key, str):
 				new_key = key.strip()
 			if isinstance(val, str):
