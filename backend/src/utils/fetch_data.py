@@ -1,3 +1,4 @@
+import os
 from asyncio import run
 from pathlib import Path
 
@@ -15,7 +16,7 @@ def get_db() -> AsyncIOMotorClient:
 	Returns
 		MongoClient: The database client.
 	"""
-	client = AsyncIOMotorClient(host="localhost", port=27017)
+	client = AsyncIOMotorClient(host=os.environ.get("DB_HOST", "localhost"), port=27017)
 	return client["turbit-t2"]
 
 
@@ -72,6 +73,7 @@ async def write_to_db() -> None:
 
 	data1 = adjust_data(data1, ObjectId())
 	data2 = adjust_data(data2, ObjectId())
+
 	await turbinesc.insert_many(
 		[
 			{"name": "turbine 1", "_id": data1[0]["turbineId"]},
