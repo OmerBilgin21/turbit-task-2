@@ -39,7 +39,7 @@ async def retrieve_turbine_data(turbine_id: ObjectId) -> list[TurbineOut]:
 		turbine_id (ObjectId): id of given item
 
 	Returns:
-		list[dict]: _description_
+		list[dict]: list of turbine data
 	"""
 	turbinedc = await get_collection(TURBINE_DATA_COLLECTION_NAME)
 	return await turbinedc.find({"turbineId": turbine_id}).to_list(length=None)

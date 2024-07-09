@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+.app-container {
+	@apply flex justify-center items-center w-screen h-screen bg-slate-100 overflow-scroll gap-16;
+}
+
 .Dropdown-option {
 	@apply flex justify-center items-center w-4/5 hover:bg-[#1d5d90] hover:text-white rounded-sm;
+}
+
+.dropdown {
+	@apply rounded-lg text-black p-2 cursor-pointer border border-opacity-60 border-dashed border-black w-28 bg-white;
+}
+
+.dropdown-control {
+	@apply flex justify-center items-center font-bold text-black 
+	border-b-[1.5px] border-b-black border-opacity-100 bg-inherit border-0;
+}
+
+.dropdown-menu {
+	@apply flex flex-col gap-4 mt-4 bg-white bg-inherit border border-opacity-60 border-dashed
+	border-black w-28 -ml-[8.6px] items-center justify-center rounded-b-lg border-y-0 pb-4;
 }

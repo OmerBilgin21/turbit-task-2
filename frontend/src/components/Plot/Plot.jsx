@@ -14,7 +14,6 @@ const PlotComponent = ({ x, y, turbineName }) => {
 		title: `Power Curve Plot for ${turbineName}`,
 		xaxis: {
 			title: "Wind Speed (m/s)",
-			range: 50,
 		},
 		yaxis: {
 			title: "Power (kW)",

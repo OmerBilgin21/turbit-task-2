@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import useTurbineData from "./hooks/useTurbineData";
 
 // components
-import Plot from "./components/Plot";
+import Plot from "./components/Plot/Plot";
 import CustomDatePicker from "./components/CustomDatepicker/CustomDatepicker";
 
 // utils
@@ -64,19 +64,12 @@ function App() {
 	}, [endDate, turbineData, selectedTurbine, startDate]);
 
 	return (
-		<div className="flex justify-center items-center w-screen h-screen bg-slate-100 overflow-scroll gap-16">
+		<div className="app-container">
 			<Dropdown
-				controlClassName="flex justify-center items-center font-bold 
-				text-black border border-0
-				border-b-[1.5px] border-b-black border-opacity-100 bg-inherit"
+				controlClassName="dropdown-control"
 				placeholder="Please select a turbine..."
-				menuClassName="flex flex-col gap-4 mt-4 bg-white bg-inherit
-				border border-opacity-60 border-dashed
-				border-black w-28 -ml-[8.6px] items-center justify-center 
-				rounded-b-lg border-y-0 pb-4"
-				className=" rounded-lg text-black p-2 
-				cursor-pointer border border-opacity-60 border-dashed
-				border-black w-28 bg-white"
+				menuClassName="dropdown-menu"
+				className="dropdown"
 				options={turbines?.map((e) => ({
 					label: e.name,
 					value: e.id,

@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 import uvicorn
@@ -10,7 +11,8 @@ from src.schemas.turbine import Turbine, TurbineOut
 
 app = FastAPI()
 
-origins = ["http://localhost:3000"]
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+origins = [FRONTEND_URL]
 
 app.add_middleware(
 	CORSMiddleware,
@@ -57,10 +59,19 @@ async def get_turbine_data(turbine_id: str) -> list[TurbineOut]:
 
 
 if __name__ == "__main__":
-	uvicorn.run(
-		"main:app",
-		host="0.0.0.0",
-		port=8000,
-		reload=True,
-		log_level="info",
-	)
+	env = os.environ.get("ENV", "dev")
+	if env == "dev":
+		uvicorn.run(
+			"main:app",
+			host="0.0.0.0",
+			port=8000,
+			reload=True,
+			log_level="info",
+		)
+	else:
+		uvicorn.run(
+			"main:app",
+			host="0.0.0.0",
+			port=8000,
+			log_level="info",
+		)
