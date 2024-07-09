@@ -23,9 +23,8 @@ jobs:
               with:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies
-              run: pip install -r ./backend/requirements.txt
-              working-directory: ./backend
-
+              run: |
+                  pip install pytest pytest-asyncio fastapi
             - name: Run tests
               run: pytest
               working-directory: ./backend
