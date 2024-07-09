@@ -65,7 +65,6 @@ function App() {
 
 	return (
 		<div className="flex justify-center items-center w-screen h-screen bg-slate-100 overflow-scroll gap-16">
-			{/*<div className="flex h-11 justify-between w-2/4">*/}
 			<Dropdown
 				controlClassName="flex justify-center items-center font-bold 
 				text-black border border-0
