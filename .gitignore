@@ -94,3 +94,5 @@ __pycache__/
 /backend/*.csv
 .vscode
 /frontend/dist
+.pytest_cache
+.ruff_cache

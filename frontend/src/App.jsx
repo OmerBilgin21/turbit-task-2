@@ -74,10 +74,10 @@ function App() {
 				menuClassName="flex flex-col gap-4 mt-4 bg-white bg-inherit
 				border border-opacity-60 border-dashed
 				border-black w-28 -ml-[8.6px] items-center justify-center 
-				rounded-b-lg border-t-0 pb-4"
+				rounded-b-lg border-y-0 pb-4"
 				className=" rounded-lg text-black p-2 
 				cursor-pointer border border-opacity-60 border-dashed
-				border-black w-28 max-h-14 bg-white"
+				border-black w-28 bg-white"
 				options={turbines?.map((e) => ({
 					label: e.name,
 					value: e.id,
