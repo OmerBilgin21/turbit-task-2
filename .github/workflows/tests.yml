@@ -24,9 +24,9 @@ jobs:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies
               run: pip install pytest pytest-md pytest-emoji pytest-asyncio
+              working-directory: ./backend
             - uses: pavelzw/pytest-action@v2
               with:
-                  custom-pytest: cd backend;pytest
                   verbose: false
                   emoji: false
                   job-summary: true
