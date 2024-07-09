@@ -1,75 +1,32 @@
 // external
 import dayjs from "dayjs";
-import DatePicker from "react-datepicker";
 import Dropdown from "react-dropdown";
 
 // hooks
+import useSWR from "swr";
 import { useState, useEffect } from "react";
+import useTurbineData from "./hooks/useTurbineData";
 
 // components
 import Plot from "./components/Plot";
+import CustomDatePicker from "./components/CustomDatepicker/CustomDatepicker";
 
 // utils
-import { getTurbines, getTurbineData } from "./utils/axios";
-
-// styles
-import "./App.css";
-import "react-datepicker/dist/react-datepicker.css";
+import { fetcher } from "./utils/axios";
 
 function App() {
-	const [turbines, setTurbines] = useState(null);
-	const [turbineData, setTurbineData] = useState({});
 	const [startDate, setStartDate] = useState();
 	const [endDate, setEndDate] = useState();
 	const [selectedTurbine, setSelectedTurbine] = useState(null);
 	const [power, setPower] = useState();
 	const [windSpeed, setWindSpeed] = useState();
-	useEffect(() => {
-		const fetchTurbines = async () => {
-			try {
-				const res = await getTurbines();
-				if (res.status === 200) {
-					setTurbines(res.data);
-				}
-			} catch (error) {
-				console.error("Error fetching turbines!", error);
-				window.alert("Error fetching turbines!");
-			}
-		};
 
-		fetchTurbines();
-	}, []);
+	const { data: turbines } = useSWR("/turbines", fetcher);
+	const { turbineData } = useTurbineData(turbines);
 
-	useEffect(() => {
-		const fetchTurbineData = async () => {
-			if (!turbines || turbines.length === 0) return;
-
-			try {
-				const promises = turbines.map(async (turbine) => {
-					const res = await getTurbineData(turbine["id"]);
-					if (res.status === 200)
-						return { id: turbine["id"], data: res.data };
-					else return null;
-				});
-
-				const results = await Promise.all(promises);
-
-				setTurbineData((prev) => {
-					const newData = {};
-					results.forEach((result) => {
-						newData[result.id] = result.data;
-					});
-					return { ...prev, ...newData };
-				});
-			} catch (error) {
-				console.alert("Error fetching turbine data!", error);
-				window.alert("Error fetching turbine data!");
-			}
-		};
-
-		fetchTurbineData();
-	}, [turbines]);
-
+	// I'm aware that the useEffect below is bad practice and unnecessary
+	// but it really helps with usability because the dates are so far behind of present
+	// and it's painful to go to 2016 using the datepickers
 	useEffect(() => {
 		setStartDate(
 			dayjs(turbineData?.[selectedTurbine]?.[0]?.["Dat/Zeit"])?.toDate()
@@ -84,39 +41,43 @@ function App() {
 	}, [turbineData, selectedTurbine, turbines]);
 
 	useEffect(() => {
+		if (!turbineData || !selectedTurbine || !turbineData[selectedTurbine])
+			return;
+
+		const filteredData = turbineData[selectedTurbine].filter(
+			(item) =>
+				dayjs(item["Dat/Zeit"]).toDate() >= startDate &&
+				dayjs(item["Dat/Zeit"]) <= endDate
+		);
 		setWindSpeed(
-			turbineData[selectedTurbine]?.map((item) => {
-				if (
-					"Wind" in item &&
-					item["Wind"] &&
-					dayjs(item["Dat/Zeit"]).toDate() >= startDate &&
-					dayjs(item["Dat/Zeit"]) <= endDate
-				)
-					return parseFloat(item.Wind.replace(",", "."));
+			filteredData.map((item) => {
+				if ("Wind" in item) return item["Wind"];
 			})
 		);
 		setPower(
-			turbineData[selectedTurbine]?.map((item) => {
-				if (
-					"Leistung" in item &&
-					item["Leistung"] &&
-					dayjs(item["Dat/Zeit"]).toDate() >= startDate &&
-					dayjs(item["Dat/Zeit"]) <= endDate
-				) {
-					return parseFloat(item.Leistung.replace(",", "."));
+			filteredData.map((item) => {
+				if ("Leistung" in item) {
+					return item["Leistung"];
 				}
 			})
 		);
 	}, [endDate, turbineData, selectedTurbine, startDate]);
 
 	return (
-		<div className="flex flex-col w-screen h-screen bg-slate-200 items-center justify-center gap-8">
+		<div className="flex justify-center items-center w-screen h-screen bg-slate-100 overflow-scroll gap-16">
+			{/*<div className="flex h-11 justify-between w-2/4">*/}
 			<Dropdown
-				controlClassName="font-bold text-black border 
-				border-b-black w-full border-opacity-100"
+				controlClassName="flex justify-center items-center font-bold 
+				text-black border border-0
+				border-b-[1.5px] border-b-black border-opacity-100 bg-inherit"
 				placeholder="Please select a turbine..."
-				className="bg-slate-300 rounded-md text-white p-2 
-				cursor-pointer border border-opacity-80 border-black"
+				menuClassName="flex flex-col gap-4 mt-4 bg-white bg-inherit
+				border border-opacity-60 border-dashed
+				border-black w-28 -ml-[8.6px] items-center justify-center 
+				rounded-b-lg border-t-0 pb-4"
+				className=" rounded-lg text-black p-2 
+				cursor-pointer border border-opacity-60 border-dashed
+				border-black w-28 max-h-14 bg-white"
 				options={turbines?.map((e) => ({
 					label: e.name,
 					value: e.id,
@@ -125,17 +86,25 @@ function App() {
 					setSelectedTurbine(val.value);
 				}}
 			/>
-			<DatePicker
-				selected={startDate}
-				onChange={(newVal) => setStartDate(newVal)}
-				showTimeSelect
-			/>
-			<Plot x={windSpeed} y={power} turbineName="turbine 1" />
-			<DatePicker
-				selected={endDate}
-				onChange={(newVal) => setEndDate(newVal)}
-				showTimeSelect
-			/>
+			<div className="flex flex-col gap-6 items-center justify-center">
+				<CustomDatePicker
+					selectedDate={startDate}
+					onChange={(newVal) => setStartDate(newVal)}
+				/>
+				<Plot
+					x={windSpeed}
+					y={power}
+					turbineName={
+						turbines?.find((e) => e?.id === selectedTurbine)?.[
+							"name"
+						]
+					}
+				/>
+				<CustomDatePicker
+					selectedDate={endDate}
+					onChange={(newVal) => setEndDate(newVal)}
+				/>
+			</div>
 		</div>
 	);
 }
