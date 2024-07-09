@@ -26,6 +26,7 @@ jobs:
               run: pip install pytest pytest-md pytest-emoji pytest-asyncio
             - uses: pavelzw/pytest-action@v2
               with:
+                  custom-pytest: cd backend;pytest
                   verbose: false
                   emoji: false
                   job-summary: true
