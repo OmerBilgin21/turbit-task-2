@@ -14,13 +14,13 @@ services:
     next:
         build:
             dockerfile: ./frontend/Dockerfile
+            args:
+                - VITE_API_URL=http://localhost:8000
         container_name: nextjs_container
         ports:
             - 3000:3000
         depends_on:
             - fastapi
-        environment:
-            - VITE_API_URL=http://localhost:8000
 
     mongodb:
         image: mongo:latest

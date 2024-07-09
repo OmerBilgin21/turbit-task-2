@@ -2,9 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+ARG VITE_API_URL
+
 COPY /frontend /app/
 RUN npm install
-RUN npm run build
+RUN VITE_API_URL=$VITE_API_URL npm run build
 
 EXPOSE 3000
 
