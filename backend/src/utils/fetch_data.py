@@ -44,21 +44,24 @@ def adjust_data(data: pd.DataFrame, id_to_assign: ObjectId) -> list[dict]:
 		for key, val in row.items():
 			new_key = key
 			new_val = val
-			should_not_touch = ("Dat/Zeit", "turbineId")
+			problematic_key = "Dat/Zeit"
+			absolutely_not_date_dat_zeit = (
+				new_key != problematic_key
+				and problematic_key not in new_key
+				and isinstance(new_key, str)
+				and new_key.strip() != problematic_key
+				and problematic_key not in new_key.strip()
+			)
+
+			convertable = new_key != "turbineId" and absolutely_not_date_dat_zeit
 
 			if isinstance(key, str):
 				new_key = key.strip()
 
-			if (
-				isinstance(new_val, str)
-				and "," in new_val
-				and new_key not in should_not_touch
-			):
+			if isinstance(new_val, str) and "," in new_val and convertable:
 				new_val = new_val.replace(",", ".")
 
-			newd[new_key] = (
-				float(new_val) if new_key not in should_not_touch else new_val
-			)
+			newd[new_key] = float(new_val) if convertable else new_val
 		newd["turbineId"] = id_to_assign
 		new_list.append(newd)
 	return new_list
